@@ -1,0 +1,16 @@
+<resources>
+     <color name="black">#000</color>
+     <color name="gray">#ccc</color>
+     <color name="white">#fff</color>
+     <color name="all">#fff</color>
+     <color name="boy">#cdf</color>
+     <color name="boys">#89b</color>
+     <color name="girl">#fcd</color>
+     <color name="girls">#b89</color>
+     <color name="fb">#3b5998</color>
+     <color name="save">#fa2</color>
+     <color name="yes">#fd6</color>
+     <color name="delete">#922</color>
+     <color name="no">#622</color>
+     <color name="darken">#3000</color>
+</resources>

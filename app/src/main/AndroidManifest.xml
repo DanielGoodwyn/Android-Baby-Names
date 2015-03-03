@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="daniel.babynames" >
+
+     <uses-permission android:name="android.permission.INTERNET" />
+     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+     <application
+          android:allowBackup="true"
+          android:icon="@drawable/ic_launcher"
+          android:label="@string/app_name"
+          android:theme="@style/AppTheme" >
+          <activity
+               android:name="daniel.babynames.Startup"
+               android:label="@string/app_name" >
+               <intent-filter>
+                    <action android:name="android.intent.action.MAIN" />
+
+                    <category android:name="android.intent.category.LAUNCHER" />
+               </intent-filter>
+          </activity>
+          <activity
+               android:name="daniel.babynames.Account"
+               android:label="@string/accountPage" >
+          </activity>
+          <activity
+               android:name="daniel.babynames.Home"
+               android:label="@string/homePage" >
+          </activity>
+          <activity
+               android:name="daniel.babynames.NewNames"
+               android:label="@string/newNamesPage" >
+          </activity>
+          <activity
+               android:name="daniel.babynames.MyNames"
+               android:label="@string/myNamesPage" >
+          </activity>
+          <activity
+               android:name="daniel.babynames.Info"
+               android:label="@string/infoPage" >
+          </activity>
+     </application>
+
+</manifest>

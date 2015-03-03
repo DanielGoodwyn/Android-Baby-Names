@@ -1,0 +1,147 @@
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:id="@+id/bg"
+     android:orientation="vertical"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     android:padding="@dimen/largeMargin"
+     tools:context=".Account"
+     android:background="@color/white">
+
+     <LinearLayout
+          android:orientation="horizontal"
+          android:id="@+id/topLayout"
+          android:gravity="center"
+          android:layout_height="0dp"
+          android:layout_width="fill_parent"
+          android:layout_weight="1"
+          android:background="@color/white">
+
+          <Button
+               android:id="@+id/logout"
+               android:onClick="logout"
+               android:text="@string/logout"
+               android:textSize="@dimen/largeText"
+               android:padding="@dimen/smallMargin"
+               android:layout_width="0dp"
+               android:layout_height="fill_parent"
+               android:layout_weight="1"
+               android:background="@color/delete"/>
+
+          <TextView
+               android:id="@+id/user"
+               android:text="@string/user"
+               android:textSize="@dimen/smallText"
+               android:gravity="center"
+               android:layout_width="0dp"
+               android:layout_height="fill_parent"
+               android:layout_weight="4"
+               android:background="@color/white"/>
+
+     </LinearLayout>
+
+     <LinearLayout
+          android:orientation="vertical"
+          android:id="@+id/topButtonsLayout"
+          android:gravity="center"
+          android:layout_height="0dp"
+          android:layout_width="fill_parent"
+          android:layout_weight="3"
+          android:background="@color/gray">
+
+          <EditText
+               android:id="@+id/username"
+               android:imeActionId="1"
+               android:hint="@string/username"
+               android:singleLine="true"
+               android:inputType="textCapWords"
+               android:textSize="@dimen/mediumText"
+               android:textAlignment="center"
+               android:padding="@dimen/smallMargin"
+               android:layout_width="fill_parent"
+               android:layout_height="0dp"
+               android:layout_weight="1"
+               android:gravity="center"
+               android:layout_margin="@dimen/smallMargin"
+               android:background="@color/white"/>
+
+          <EditText
+               android:id="@+id/password"
+               android:imeActionId="1"
+               android:hint="@string/password"
+               android:singleLine="true"
+               android:inputType="textPassword"
+               android:textSize="@dimen/mediumText"
+               android:textAlignment="center"
+               android:padding="@dimen/smallMargin"
+               android:layout_width="fill_parent"
+               android:layout_height="0dp"
+               android:layout_weight="1"
+               android:gravity="center"
+               android:layout_margin="@dimen/smallMargin"
+               android:background="@color/white"/>
+
+          <EditText
+               android:id="@+id/email"
+               android:imeActionId="1"
+               android:hint="@string/email"
+               android:singleLine="true"
+               android:inputType="textEmailAddress"
+               android:textSize="@dimen/mediumText"
+               android:textAlignment="center"
+               android:padding="@dimen/smallMargin"
+               android:layout_width="fill_parent"
+               android:layout_height="0dp"
+               android:layout_weight="1"
+               android:gravity="center"
+               android:layout_margin="@dimen/smallMargin"
+               android:background="@color/white"/>
+
+     </LinearLayout>
+
+     <Button
+          android:text="@string/fb"
+          android:id="@+id/fb"
+          android:background="@color/fb"
+          android:layout_width="fill_parent"
+          android:layout_height="0dp"
+          android:layout_weight="1"
+          android:textColor="@color/white"
+          android:textSize="@dimen/largeText"/>
+
+     <LinearLayout
+          android:orientation="horizontal"
+          android:id="@+id/bottomButtonsLayout"
+          android:gravity="center"
+          android:layout_height="0dp"
+          android:layout_width="fill_parent"
+          android:layout_weight="1"
+          android:background="@color/white">
+
+          <Button
+               android:id="@+id/signup"
+               android:onClick="signup"
+               android:text="@string/signup"
+               android:textSize="@dimen/largeText"
+               android:padding="@dimen/smallMargin"
+               android:layout_width="0dp"
+               android:layout_height="fill_parent"
+               android:layout_weight="1"
+               android:background="@color/save"/>
+
+          <Button
+               android:id="@+id/login"
+               android:onClick="login"
+               android:text="@string/login"
+               android:textSize="@dimen/largeText"
+               android:padding="@dimen/smallMargin"
+               android:layout_width="0dp"
+               android:layout_height="fill_parent"
+               android:layout_weight="1"
+               android:background="@color/gray"
+               android:singleLine="false"/>
+
+     </LinearLayout>
+
+</LinearLayout>

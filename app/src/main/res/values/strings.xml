@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+     <string name="app_name">Baby Names</string>
+     <string name="homePage">Baby Names</string>
+     <string name="accountPage">Baby Names - My Account</string>
+     <string name="newNamesPage">New Names</string>
+     <string name="myNamesPage">My Names</string>
+     <string name="infoPage">Info</string>
+     <string name="action_settings">Settings</string>
+
+     <string name="name">Name</string>
+     <string name="user">User</string>
+
+     <string name="username">username</string>
+     <string name="email">email</string>
+     <string name="password">password</string>
+
+     <string name="signup">Sign Up</string>
+     <string name="logout">x</string>
+     <string name="fb">fb</string>
+     <string name="login">&gt;</string>
+     <string name="names">&gt;</string>
+     <string name="account">&lt;</string>
+     <string name="back">&lt;</string>
+     <string name="myList">☆</string>
+     <string name="save">☆</string>
+     <string name="delete">x</string>
+     <string name="random">Ξ</string>
+     <string name="info">i</string>
+     <string name="webView">www</string>
+     <string name="boys">M</string>
+     <string name="girls">F</string>
+     <string name="all">||</string>
+
+     <string name="limit">max:1000</string>
+
+</resources>

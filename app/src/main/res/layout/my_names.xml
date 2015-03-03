@@ -1,0 +1,143 @@
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:id="@+id/bg"
+     android:orientation="vertical"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     android:padding="@dimen/largeMargin"
+     tools:context=".NewNames">
+
+     <LinearLayout
+          android:orientation="horizontal"
+          android:layout_width="fill_parent"
+          android:layout_height="0dp"
+          android:layout_weight="1">
+
+          <Button
+               android:id="@+id/back"
+               android:onClick="back"
+               android:text="@string/back"
+               android:textSize="@dimen/largeText"
+               android:padding="@dimen/smallMargin"
+               android:layout_height="fill_parent"
+               android:layout_width="0dp"
+               android:layout_weight="1"
+               android:background="@color/gray"
+               android:gravity="center"
+               android:layout_gravity="center_horizontal"/>
+
+          <TextView
+               android:text="@string/myNamesPage"
+               android:gravity="center"
+               android:textSize="@dimen/largeText"
+               android:layout_height="fill_parent"
+               android:layout_width="0dp"
+               android:layout_weight="3"/>
+
+          <TextView
+               android:text="@string/myList"
+               android:gravity="center"
+               android:textSize="@dimen/largeText"
+               android:layout_height="fill_parent"
+               android:layout_width="0dp"
+               android:layout_weight="1"/>
+
+     </LinearLayout>
+
+     <LinearLayout
+          android:orientation="horizontal"
+          android:id="@+id/genderButtonsLayout"
+          android:gravity="center"
+          android:layout_height="0dp"
+          android:layout_width="fill_parent"
+          android:layout_weight="1">
+
+          <Button
+               android:id="@+id/boys"
+               android:onClick="boys"
+               android:text="@string/boys"
+               android:textSize="@dimen/largeText"
+               android:padding="@dimen/smallMargin"
+               android:layout_width="0dp"
+               android:layout_height="fill_parent"
+               android:layout_weight="1"
+               android:background="@color/gray"/>
+
+          <Button
+               android:background="@color/gray"
+               android:id="@+id/all"
+               android:onClick="all"
+               android:text="@string/all"
+               android:textSize="@dimen/largeText"
+               android:padding="@dimen/smallMargin"
+               android:layout_width="0dp"
+               android:layout_height="fill_parent"
+               android:layout_weight="1"/>
+
+          <Button
+               android:background="@color/gray"
+               android:id="@+id/girls"
+               android:onClick="girls"
+               android:text="@string/girls"
+               android:textSize="@dimen/largeText"
+               android:padding="@dimen/smallMargin"
+               android:layout_width="0dp"
+               android:layout_height="fill_parent"
+               android:layout_weight="1"/>
+
+     </LinearLayout>
+
+     <RelativeLayout
+          android:id="@+id/namesListViewLayout"
+          android:layout_height="0dp"
+          android:layout_width="fill_parent"
+          android:layout_weight="3">
+
+          <ListView
+               android:id="@+id/namesListView"
+               android:choiceMode="singleChoice"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"/>
+
+     </RelativeLayout>
+
+     <LinearLayout
+          android:orientation="horizontal"
+          android:layout_height="0dp"
+          android:layout_width="fill_parent"
+          android:layout_weight="1">
+
+          <Button
+               android:id="@+id/delete"
+               android:onClick="delete"
+               android:text="@string/delete"
+               android:textSize="@dimen/largeText"
+               android:layout_height="fill_parent"
+               android:layout_width="0dp"
+               android:layout_weight="1"
+               android:background="@color/delete"/>
+
+          <Button
+               android:id="@+id/name"
+               android:onClick="name"
+               android:text="@string/name"
+               android:textSize="@dimen/largeText"
+               android:layout_height="fill_parent"
+               android:layout_width="0dp"
+               android:layout_weight="4"
+               android:background="@color/gray"/>
+
+          <Button
+               android:id="@+id/random"
+               android:onClick="random"
+               android:text="@string/random"
+               android:textSize="@dimen/largeText"
+               android:layout_height="fill_parent"
+               android:layout_width="0dp"
+               android:layout_weight="1"
+               android:background="@color/gray"/>
+
+     </LinearLayout>
+
+</LinearLayout>

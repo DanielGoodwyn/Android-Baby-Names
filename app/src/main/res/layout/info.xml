@@ -1,0 +1,97 @@
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:id="@+id/bg"
+     android:orientation="vertical"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     android:padding="@dimen/largeMargin"
+     tools:context=".NewNames">
+
+     <LinearLayout
+          android:orientation="horizontal"
+          android:layout_width="fill_parent"
+          android:layout_height="0dp"
+          android:layout_weight="1">
+
+          <Button
+               android:id="@+id/back"
+               android:onClick="back"
+               android:text="@string/back"
+               android:textSize="@dimen/largeText"
+               android:padding="@dimen/smallMargin"
+               android:layout_height="fill_parent"
+               android:layout_width="0dp"
+               android:layout_weight="1"
+               android:background="@color/gray"
+               android:gravity="center"
+               android:layout_gravity="center_horizontal"/>
+
+          <TextView
+               android:text="@string/infoPage"
+               android:gravity="center"
+               android:textSize="@dimen/largeText"
+               android:layout_height="fill_parent"
+               android:layout_width="0dp"
+               android:layout_weight="3"/>
+
+          <Button
+               android:id="@+id/myList"
+               android:onClick="myList"
+               android:text="@string/myList"
+               android:textSize="@dimen/largeText"
+               android:padding="@dimen/smallMargin"
+               android:layout_width="0dp"
+               android:layout_height="fill_parent"
+               android:layout_weight="1"
+               android:background="@color/gray"/>
+
+     </LinearLayout>
+
+     <WebView
+          android:id="@+id/webView"
+          android:layout_height="0dp"
+          android:layout_width="fill_parent"
+          android:layout_weight="4">
+
+     </WebView>
+
+     <LinearLayout
+          android:orientation="horizontal"
+          android:layout_height="0dp"
+          android:layout_width="fill_parent"
+          android:layout_weight="1">
+
+          <Button
+               android:id="@+id/delete"
+               android:onClick="delete"
+               android:text="@string/delete"
+               android:textSize="@dimen/largeText"
+               android:layout_height="fill_parent"
+               android:layout_width="0dp"
+               android:layout_weight="1"
+               android:background="@color/delete"/>
+
+          <TextView
+               android:orientation="horizontal"
+               android:id="@+id/name"
+               android:text="@string/name"
+               android:gravity="center"
+               android:textSize="@dimen/largeText"
+               android:layout_height="fill_parent"
+               android:layout_width="0dp"
+               android:layout_weight="4"/>
+
+          <Button
+               android:id="@+id/save"
+               android:onClick="save"
+               android:text="@string/save"
+               android:textSize="@dimen/largeText"
+               android:layout_height="fill_parent"
+               android:layout_width="0dp"
+               android:layout_weight="1"
+               android:background="@color/save"/>
+
+     </LinearLayout>
+
+</LinearLayout>

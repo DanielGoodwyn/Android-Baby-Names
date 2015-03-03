@@ -1,0 +1,8 @@
+<resources>
+     <dimen name="smallMargin">6dp</dimen>
+     <dimen name="mediumMargin">12dp</dimen>
+     <dimen name="largeMargin">24dp</dimen>
+     <dimen name="smallText">16sp</dimen>
+     <dimen name="mediumText">24sp</dimen>
+     <dimen name="largeText">32sp</dimen>
+</resources>

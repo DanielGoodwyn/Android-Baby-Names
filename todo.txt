@@ -1,0 +1,35 @@
+----------------------------------------------------------------------
+                                                  Baby Names | Android
+----------------------------------------------------------------------
+  ______________
+_| OPTIMIZATION |_____________________________________________________
+
+        long |   database   | rank coed
+        long |   SOLIDify   | check to see if the code is SOLID
+     tedious | cleanup code | spacing, order
+     tedious | add comments | explain code
+----------------------------------------------------------------------
+  __________
+_| FEATURES |_________________________________________________________
+
+        easy |     name     | add your own baby name
+ complicated |     rank     | sort by personal rank / rating
+ complicated |   facebook   | get fb name on signup with fb
+        long |    social    | use fb friend names, share lists
+----------------------------------------------------------------------
+  ________
+_| MOBILE |___________________________________________________________
+
+ complicated |   facebook   | add signup, login, link, and unlink
+ complicated |    login     | set username, password, and  email
+ complicated |    errors    | display error for login or signup fail
+      medium |    names     | search names (using regex?)
+      medium |    filter    | filter names by gender
+      medium |     sort     | sort names
+unneccessary |   tutorial   | for the first time someone opens the app
+----------------------------------------------------------------------
+  _____
+_| FIX |______________________________________________________________
+
+ complicated |      ACL     | set user ACL read to public
+----------------------------------------------------------------------

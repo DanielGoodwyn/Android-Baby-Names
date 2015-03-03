@@ -1,0 +1,156 @@
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:id="@+id/bg"
+     android:background="@color/white"
+     android:orientation="vertical"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     android:padding="@dimen/largeMargin"
+     tools:context=".Home">
+
+     <LinearLayout
+          android:orientation="horizontal"
+          android:layout_width="fill_parent"
+          android:layout_height="0dp"
+          android:layout_weight="1">
+
+          <Button
+               android:id="@+id/account"
+               android:onClick="account"
+               android:text="@string/account"
+               android:textSize="@dimen/largeText"
+               android:padding="@dimen/smallMargin"
+               android:layout_height="fill_parent"
+               android:layout_width="0dp"
+               android:layout_weight="1"
+               android:background="@color/gray"
+               android:gravity="center"
+               android:layout_gravity="center_horizontal"/>
+
+          <TextView
+               android:id="@+id/homePage"
+               android:text="@string/homePage"
+               android:gravity="center"
+               android:textSize="@dimen/largeText"
+               android:layout_height="fill_parent"
+               android:layout_width="0dp"
+               android:layout_weight="3"/>
+
+          <Button
+               android:id="@+id/myList"
+               android:onClick="myList"
+               android:text="@string/myList"
+               android:textSize="@dimen/largeText"
+               android:padding="@dimen/smallMargin"
+               android:layout_width="0dp"
+               android:layout_height="fill_parent"
+               android:layout_weight="1"
+               android:background="@color/gray"/>
+
+     </LinearLayout>
+
+     <LinearLayout
+          android:orientation="horizontal"
+          android:id="@+id/genderButtonsLayout"
+          android:gravity="center"
+          android:layout_height="0dp"
+          android:layout_width="fill_parent"
+          android:layout_weight="1">
+
+          <Button
+               android:id="@+id/boys"
+               android:onClick="boys"
+               android:text="@string/boys"
+               android:textSize="@dimen/largeText"
+               android:padding="@dimen/smallMargin"
+               android:layout_width="0dp"
+               android:layout_height="fill_parent"
+               android:layout_weight="1"
+               android:background="@color/gray"/>
+
+          <Button
+               android:background="@color/gray"
+               android:id="@+id/all"
+               android:onClick="all"
+               android:text="@string/all"
+               android:textSize="@dimen/largeText"
+               android:padding="@dimen/smallMargin"
+               android:layout_width="0dp"
+               android:layout_height="fill_parent"
+               android:layout_weight="1"/>
+
+          <Button
+               android:background="@color/gray"
+               android:id="@+id/girls"
+               android:onClick="girls"
+               android:text="@string/girls"
+               android:textSize="@dimen/largeText"
+               android:padding="@dimen/smallMargin"
+               android:layout_width="0dp"
+               android:layout_height="fill_parent"
+               android:layout_weight="1"/>
+
+     </LinearLayout>
+
+     <RelativeLayout
+          android:id="@+id/alphabetListViewLayout"
+          android:layout_height="0dp"
+          android:layout_width="fill_parent"
+          android:layout_weight="3">
+
+          <ListView
+               android:id="@+id/alphabetListView"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"/>
+
+     </RelativeLayout>
+
+     <LinearLayout
+          android:orientation="horizontal"
+          android:id="@+id/bottomButtonsLayout"
+          android:gravity="center"
+          android:layout_height="0dp"
+          android:layout_width="fill_parent"
+          android:layout_weight="1">
+
+          <Spinner
+               android:id="@+id/sorts_spinner"
+               android:layout_width="0dp"
+               android:layout_height="fill_parent"
+               android:textSize="@dimen/largeText"
+               android:padding="@dimen/mediumMargin"
+               android:layout_weight="1"
+               android:background="@color/gray"
+               android:dropDownWidth="fill_parent"/>
+
+          <EditText
+               android:id="@+id/limit"
+               android:imeActionId="1"
+               android:hint="@string/limit"
+               android:text="25"
+               android:singleLine="true"
+               android:inputType="number"
+               android:textSize="@dimen/mediumText"
+               android:textAlignment="center"
+               android:padding="@dimen/smallMargin"
+               android:layout_width="0dp"
+               android:layout_height="fill_parent"
+               android:layout_weight="1"
+               android:gravity="center"
+               android:background="@color/white"/>
+
+          <Button
+               android:id="@+id/names"
+               android:onClick="names"
+               android:text="@string/names"
+               android:textSize="@dimen/largeText"
+               android:padding="@dimen/smallMargin"
+               android:layout_width="0dp"
+               android:layout_height="fill_parent"
+               android:layout_weight="1"
+               android:background="@color/gray"/>
+
+     </LinearLayout>
+
+</LinearLayout>
