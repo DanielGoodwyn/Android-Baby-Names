@@ -13,14 +13,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.parse.FindCallback;
-import com.parse.ParseACL;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class NewNames extends Activity
@@ -45,9 +42,10 @@ protected void onCreate(Bundle b)
      super.onCreate(b);
      setContentView(R.layout.new_names);
 
-     ParseUser currentUser = ParseUser.getCurrentUser();
-     currentAppUser = currentUser.getUsername();
-     currentAppUserId = currentUser.getObjectId();
+     if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+          currentAppUser = AppPrefs.getString(this, "username", "");
+          currentAppUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+     }
      nameString = "Loading..";
      updateMyState();
      updateScreen();
@@ -68,36 +66,53 @@ protected void onCreate(Bundle b)
 private void getNames(String gender) {
      names.clear();
      genders.clear();
-     final Button name = (Button)findViewById(R.id.name);
-     name.setText("Loading...");
-     name.setEnabled(false);
-     ParseQuery<ParseObject> q = ParseQuery.getQuery("name");
-     if (gender!="All"&&gender!=null) {
-          q.whereEqualTo("gender", gender);
-     }
-     if (sortString.equals("namesAtoZ")) {
-          q.orderByAscending("name");
-     } else if (sortString.equals("namesZtoA")) {
-          q.orderByDescending("name");
-     } else if (sortString.equals("uncommon")) {
-          q.orderByDescending("rank");
-     } else {
-          q.orderByAscending("rank");
-     }
-     q.whereMatches("name", letterString + ".*");
-     q.setLimit(limitInt);
-     q.findInBackground(new FindCallback<ParseObject>() {
-          public void done(List<ParseObject> objectList, ParseException e) {
+     final Button nameButton = (Button)findViewById(R.id.name);
+     nameButton.setText("Loading...");
+     nameButton.setEnabled(false);
+     DatabaseQuery<DatabaseObject> q = DatabaseQuery.getQuery("Name");
+     
+     q.findInBackground(new DatabaseQuery.FindCallback<DatabaseObject>() {
+          public void done(List<DatabaseObject> objectList, Exception e) {
                if (e == null) {
-                    for (int i = 0;i<objectList.size();i++) {
-                         names.add(i, objectList.get(i).getString("name"));
-                         genders.add(i, objectList.get(i).getString("gender"));
+                    List<DatabaseObject> filtered = new ArrayList<>();
+                    for (int i = 0; i < objectList.size(); i++) {
+                         DatabaseObject obj = objectList.get(i);
+                         String objGender = obj.getString("gender");
+                         String objName = obj.getString("name");
+                         if (objName == null) continue;
+                         
+                         boolean genderMatch = genderString.equals("All") || (objGender != null && objGender.equals(genderString));
+                         boolean letterMatch = letterString == null || objName.toUpperCase().startsWith(letterString.toUpperCase());
+                         
+                         if (genderMatch && letterMatch) {
+                              filtered.add(obj);
+                         }
+                    }
+                    
+                    Collections.sort(filtered, new Comparator<DatabaseObject>() {
+                         public int compare(DatabaseObject a, DatabaseObject b) {
+                              if (sortString.equals("uncommon")) {
+                                   return b.getInt("rank") - a.getInt("rank");
+                              } else if (sortString.equals("popular")) {
+                                   return a.getInt("rank") - b.getInt("rank");
+                              } else if (sortString.equals("namesZtoA")) {
+                                   return b.getString("name").compareToIgnoreCase(a.getString("name"));
+                              } else { // namesAtoZ
+                                   return a.getString("name").compareToIgnoreCase(b.getString("name"));
+                              }
+                         }
+                    });
+                    
+                    int limit = Math.min(limitInt, filtered.size());
+                    for (int i = 0; i < limit; i++) {
+                         names.add(filtered.get(i).getString("name"));
+                         genders.add(filtered.get(i).getString("gender"));
                     }
                } else {
                     Log.d("object", "Error: " + e.getMessage());
                }
                pickRandomName();
-               name.setEnabled(true);
+               nameButton.setEnabled(true);
           }
      });
 }
@@ -126,7 +141,7 @@ public void populateNamesListView()
 
                selectedItem = position;
                nameString = names.get(position);
-               currentGenderString = genders.get(position);
+               currentGenderString = (position < genders.size() && genders.get(position) != null) ? genders.get(position) : "M";
 
                updateScreen();
 
@@ -138,17 +153,14 @@ public void populateNamesListView()
                LVNames.setSelection(position);
                LVNames.setSelectionFromTop(position, (screenSize/2)-70);
 
-               ParseObject object = new ParseObject("_user");
-               object.put("userId", currentAppUserId);
-               object.put("name", nameString);
-               object.put("gender", genderString);
-               object.saveInBackground();
+               AppPrefs.saveString(NewNames.this, "name", nameString);
+               AppPrefs.saveString(NewNames.this, "gender", genderString);
 
                Button save = (Button)findViewById(R.id.save);
                save.setTextColor(getResources().getColor(R.color.black));
-               if (currentGenderString.equals('F')) {
+               if (currentGenderString != null && currentGenderString.equals("F")) {
                     save.setBackgroundColor(getResources().getColor(R.color.girl));
-               } else if (currentGenderString.equals('M')) {
+               } else if (currentGenderString != null && currentGenderString.equals("M")) {
                     save.setBackgroundColor(getResources().getColor(R.color.boy));
                }
           }
@@ -189,28 +201,22 @@ public void updateScreen() {
           allButton.setTextColor(getResources().getColor(R.color.white));
      }
 
-     ParseUser saveState = new ParseUser().getCurrentUser();
-     saveState.put("lastPage", "MyNames");
-     saveState.put("gender", genderString);
-     saveState.put("letter", letterString);
-     saveState.put("name", nameString);
-     saveState.put("limit", limitInt);
-     saveState.setACL(new ParseACL(ParseUser.getCurrentUser()));
-     saveState.saveInBackground();
+     AppPrefs.saveString(this, "lastPage", "NewNames");
+     AppPrefs.saveString(this, "gender", genderString);
+     AppPrefs.saveString(this, "letter", letterString);
+     AppPrefs.saveString(this, "name", nameString);
+     AppPrefs.saveInt(this, "limit", limitInt);
 
      Button save = (Button)findViewById(R.id.save);
      save.setTextColor(getResources().getColor(R.color.black));
 }
 
 public void updateMyState() {
-     ParseUser currentUser = ParseUser.getCurrentUser();
-     if (currentUser != null) {
-          genderString = currentUser.getString("gender");
-          letterString = currentUser.getString("letter");
-          nameString = currentUser.getString("name");
-          sortString = currentUser.getString("sort");
-          limitInt = currentUser.getInt("limit");
-     }
+     genderString = AppPrefs.getString(this, "gender", "M");
+     letterString = AppPrefs.getString(this, "letter", "A");
+     nameString = AppPrefs.getString(this, "name", "Adam");
+     sortString = AppPrefs.getString(this, "sort", "popular");
+     limitInt = AppPrefs.getInt(this, "limit", 25);
 }
 
 public void myList(View v) {
@@ -234,15 +240,15 @@ public void back(View v) {
 }
 
 public void save(View v) {
-     ParseQuery<ParseObject> q = ParseQuery.getQuery("names");
+     DatabaseQuery<DatabaseObject> q = DatabaseQuery.getQuery("names");
      q.whereEqualTo("name", nameString);
      q.setLimit(1);
-     q.findInBackground(new FindCallback<ParseObject>() {
-          public void done(List<ParseObject> objectList, ParseException e) {
+     q.findInBackground(new DatabaseQuery.FindCallback<DatabaseObject>() {
+          public void done(List<DatabaseObject> objectList, Exception e) {
                Button save = (Button)findViewById(R.id.save);
                if (e == null) {
                     if (objectList.size()==0) {
-                         ParseObject object = new ParseObject("names");
+                         DatabaseObject object = new DatabaseObject("names");
                          object.put("userId", currentAppUserId);
                          object.put("name", nameString);
                          object.put("gender", currentGenderString);
@@ -291,15 +297,18 @@ public void girls(View v) {
 }
 
 public void setMyState() {
-     ParseObject object = new ParseObject("_user");
-     object.put("user", currentAppUser);
-     object.put("name", nameString);
-     object.put("letter", letterString);
-     object.put("gender", genderString);
-     object.saveInBackground();
+     AppPrefs.saveString(this, "name", nameString);
+     AppPrefs.saveString(this, "letter", letterString);
+     AppPrefs.saveString(this, "gender", genderString);
 }
 
 public void pickRandomName() {
+     if (names == null || names.size() == 0) {
+          nameString = "No names found";
+          currentGenderString = genderString;
+          updateScreen();
+          return;
+     }
      int randomNumber = rand(0,names.size()-1);
      nameString = names.get(randomNumber);
      currentGenderString = genders.get(randomNumber);
@@ -322,8 +331,7 @@ public int rand(int a, int b)
 }
 
 public void lastPage() {
-     ParseUser saveState = new ParseUser().getCurrentUser();
-     saveState.put("lastPage", "NewNames");
+     AppPrefs.saveString(this, "lastPage", "NewNames");
 }
 
 }

@@ -16,8 +16,10 @@
      <string name="email">email</string>
      <string name="password">password</string>
 
+     <string name="begin">Begin</string>
+     <string name="begin_with_google">Begin with Google</string>
      <string name="signup">Sign Up</string>
-     <string name="logout">x</string>
+     <string name="logout">Log Out</string>
      <string name="fb">fb</string>
      <string name="login">&gt;</string>
      <string name="names">&gt;</string>

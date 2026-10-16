@@ -16,8 +16,6 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.parse.ParseACL;
-import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -150,11 +148,8 @@ public void createSortsSpinner() {
      sortsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
           public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                sortSpinnerSelection = position;
-               final ParseUser currentUser = new ParseUser().getCurrentUser();
                sortType = parent.getItemAtPosition(position).toString();
-               currentUser.put("sort", sortType);
-               currentUser.setACL(new ParseACL(currentUser));
-               currentUser.saveInBackground();
+               AppPrefs.saveString(Home.this, "sort", sortType);
           }
           public void onNothingSelected(AdapterView<?> parent) {}
      });
@@ -281,29 +276,22 @@ public void updateScreen() {
           allButton.setTextColor(getResources().getColor(R.color.white));
           homePage.setText("All " + letterString + space + "Names (" + limitInt +  ")");
      }
-     ParseUser saveState = new ParseUser().getCurrentUser();
-     saveState.put("gender", genderString);
-     saveState.put("letter", letterString);
-     saveState.put("name", nameString);
-     saveState.put("limit", limitInt);
-     saveState.setACL(new ParseACL(ParseUser.getCurrentUser()));
-     saveState.saveInBackground();
+     AppPrefs.saveString(this, "gender", genderString);
+     AppPrefs.saveString(this, "letter", letterString);
+     AppPrefs.saveString(this, "name", nameString);
+     AppPrefs.saveInt(this, "limit", limitInt);
 }
 
 public void updateMyState() {
-     ParseUser currentUser = ParseUser.getCurrentUser();
-     if (currentUser != null) {
-          genderString = currentUser.getString("gender");
-          letterString = currentUser.getString("letter");
-          nameString = currentUser.getString("name");
-          sortString = currentUser.getString("sort");
-          limitInt = currentUser.getInt("limit");
-     }
+     genderString = AppPrefs.getString(this, "gender", "M");
+     letterString = AppPrefs.getString(this, "letter", "A");
+     nameString = AppPrefs.getString(this, "name", "Adam");
+     sortString = AppPrefs.getString(this, "sort", "popular");
+     limitInt = AppPrefs.getInt(this, "limit", 25);
 }
 
 public void lastPage() {
-     ParseUser saveState = new ParseUser().getCurrentUser();
-     saveState.put("lastPage", "Home");
+     AppPrefs.saveString(this, "lastPage", "Home");
 }
 
 }

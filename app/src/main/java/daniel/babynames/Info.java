@@ -9,11 +9,7 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
@@ -35,16 +31,15 @@ protected void onCreate(Bundle b) {
      super.onCreate(b);
      setContentView(R.layout.info);
 
-     ParseUser currentUser = ParseUser.getCurrentUser();
      TextView name = (TextView)findViewById(R.id.name);
-     if (currentUser != null) {
-          currentAppUser = currentUser.getUsername();
-          currentAppUserId = currentUser.getObjectId();
-          lastPage = currentUser.getString("lastPage");
-          genderString = currentUser.getString("gender");
-          letterString = currentUser.getString("letter");
-          nameString = currentUser.getString("name");
-          limitInt = currentUser.getInt("limit");
+     if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+          currentAppUser = AppPrefs.getString(this, "username", "");
+          currentAppUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+          lastPage = AppPrefs.getString(this, "lastPage", "Home");
+          genderString = AppPrefs.getString(this, "gender", "M");
+          letterString = AppPrefs.getString(this, "letter", "A");
+          nameString = AppPrefs.getString(this, "name", "Adam");
+          limitInt = AppPrefs.getInt(this, "limit", 25);
           name.setText(nameString);
           setGenderColor();
           if (lastPage.equals("MyNames")) {
@@ -55,7 +50,7 @@ protected void onCreate(Bundle b) {
                delete.setAlpha(0);
           }
           WebView webView = (WebView) findViewById(R.id.webView);
-          webView.loadUrl("http://www.behindthename.com/name/" + nameString.toLowerCase());
+          webView.loadUrl("https://www.behindthename.com/name/" + nameString.toLowerCase());
      } else {
           lastPage = "Home";
      }
@@ -82,17 +77,17 @@ public void myList(View v) {
 }
 
 public void save(View v) {
-     ParseQuery<ParseObject> q = ParseQuery.getQuery("names");
+     DatabaseQuery<DatabaseObject> q = DatabaseQuery.getQuery("names");
      q.whereEqualTo("name", nameString);
      q.setLimit(1);
-     q.findInBackground(new FindCallback<ParseObject>() {
-          public void done(List<ParseObject> objectList, ParseException e) {
+     q.findInBackground(new DatabaseQuery.FindCallback<DatabaseObject>() {
+          public void done(List<DatabaseObject> objectList, Exception e) {
                TextView save = (TextView)findViewById(R.id.save);
                TextView delete = (TextView)findViewById(R.id.delete);
                TextView name = (TextView)findViewById(R.id.name);
                if (e == null) {
                     if (objectList.size()==0) {
-                         ParseObject object = new ParseObject("names");
+                         DatabaseObject object = new DatabaseObject("names");
                          object.put("userId", currentAppUserId);
                          object.put("name", nameString);
                          object.put("gender", genderString);
@@ -110,20 +105,20 @@ public void save(View v) {
 }
 
 public void delete(View v) {
-     ParseQuery<ParseObject> query = ParseQuery.getQuery("names");
+     DatabaseQuery<DatabaseObject> query = DatabaseQuery.getQuery("names");
      query.whereEqualTo("name", nameString);
-     query.findInBackground(new FindCallback<ParseObject>() {
-          public void done(List<ParseObject> objectList, ParseException e) {
+     query.findInBackground(new DatabaseQuery.FindCallback<DatabaseObject>() {
+          public void done(List<DatabaseObject> objectList, Exception e) {
                for (int i = 0; i < objectList.size(); i++) {
                     TextView save = (TextView)findViewById(R.id.save);
                     TextView delete = (TextView)findViewById(R.id.delete);
                     TextView name = (TextView)findViewById(R.id.name);
                     try {
-                         objectList.get(i).delete();
+                         objectList.get(i).deleteInBackground();
                          save.setAlpha(1);
                          delete.setAlpha(0);
                          name.setAlpha((float) .5);
-                    } catch (ParseException exception) {
+                    } catch (Exception exception) {
                          delete.setText("Fail.");
                     }
                }
@@ -141,8 +136,7 @@ public void setGenderColor() {
 }
 
 public void lastPage() {
-     ParseUser saveState = new ParseUser().getCurrentUser();
-     saveState.put("lastPage", "Info");
+     AppPrefs.saveString(this, "lastPage", "Info");
 }
 
 }

@@ -14,12 +14,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.parse.FindCallback;
-import com.parse.ParseACL;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,9 +40,10 @@ protected void onCreate(Bundle b)
      super.onCreate(b);
      setContentView(R.layout.my_names);
 
-     ParseUser currentUser = ParseUser.getCurrentUser();
-     currentAppUser = currentUser.getUsername();
-     currentAppUserId = currentUser.getObjectId();
+     if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+          currentAppUser = AppPrefs.getString(this, "username", "");
+          currentAppUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+     }
      nameString = "Loading..";
      updateMyState();
      updateScreen();
@@ -73,7 +69,7 @@ private void getNames(String gender) {
      name.setText("Loading...");
      name.setEnabled(false);
      random.setEnabled(false);
-     ParseQuery<ParseObject> q = ParseQuery.getQuery("names");
+     DatabaseQuery<DatabaseObject> q = DatabaseQuery.getQuery("names");
      q.whereEqualTo("userId", currentAppUserId);
      if (gender!="All"&&gender!=null) {
           q.whereEqualTo("gender", gender);
@@ -89,8 +85,8 @@ private void getNames(String gender) {
           q.orderByAscending("name");
      }
      q.setLimit(limitInt);
-     q.findInBackground(new FindCallback<ParseObject>() {
-          public void done(List<ParseObject> objectList, ParseException e) {
+     q.findInBackground(new DatabaseQuery.FindCallback<DatabaseObject>() {
+          public void done(List<DatabaseObject> objectList, Exception e) {
                if (e == null) {
                     for (int i = 0;i<objectList.size();i++) {
                          names.add(i, objectList.get(i).getString("name"));
@@ -142,7 +138,7 @@ public void populateNamesListView()
 
                selectedItem = position;
                nameString = names.get(position);
-               genderString = genders.get(position);
+               genderString = (position < genders.size() && genders.get(position) != null) ? genders.get(position) : "M";
 
                updateScreen();
 
@@ -154,11 +150,8 @@ public void populateNamesListView()
                LVNames.setSelection(position);
                LVNames.setSelectionFromTop(position, (screenSize/2)-70);
 
-               ParseObject object = new ParseObject("_user");
-               object.put("userId", currentAppUserId);
-               object.put("name", nameString);
-               object.put("gender", genderString);
-               object.saveInBackground();
+               AppPrefs.saveString(MyNames.this, "name", nameString);
+               AppPrefs.saveString(MyNames.this, "gender", genderString);
 
                Button delete = (Button)findViewById(R.id.delete);
                delete.setTextColor(getResources().getColor(R.color.black));
@@ -200,28 +193,22 @@ public void updateScreen() {
           allButton.setTextColor(getResources().getColor(R.color.white));
      }
 
-     ParseUser saveState = new ParseUser().getCurrentUser();
-     saveState.put("lastPage", "MyNames");
-     saveState.put("gender", genderString);
-     saveState.put("letter", letterString);
-     saveState.put("name", nameString);
-     saveState.put("limit", limitInt);
-     saveState.setACL(new ParseACL(ParseUser.getCurrentUser()));
-     saveState.saveInBackground();
+     AppPrefs.saveString(this, "lastPage", "MyNames");
+     AppPrefs.saveString(this, "gender", genderString);
+     AppPrefs.saveString(this, "letter", letterString);
+     AppPrefs.saveString(this, "name", nameString);
+     AppPrefs.saveInt(this, "limit", limitInt);
 
      Button delete = (Button)findViewById(R.id.delete);
      delete.setTextColor(getResources().getColor(R.color.black));
 }
 
 public void updateMyState() {
-     ParseUser currentUser = ParseUser.getCurrentUser();
-     if (currentUser != null) {
-          genderString = currentUser.getString("gender");
-          letterString = currentUser.getString("letter");
-          nameString = currentUser.getString("name");
-          sortString = currentUser.getString("sort");
-          limitInt = currentUser.getInt("limit");
-     }
+     genderString = AppPrefs.getString(this, "gender", "M");
+     letterString = AppPrefs.getString(this, "letter", "A");
+     nameString = AppPrefs.getString(this, "name", "Adam");
+     sortString = AppPrefs.getString(this, "sort", "popular");
+     limitInt = AppPrefs.getInt(this, "limit", 25);
 }
 
 public void name(View v) {
@@ -239,14 +226,14 @@ public void back(View v) {
 public void delete(View v) {
      Button delete = (Button)findViewById(R.id.delete);
      delete.setTextColor(getResources().getColor(R.color.no));
-     ParseQuery<ParseObject> query = ParseQuery.getQuery("names");
+     DatabaseQuery<DatabaseObject> query = DatabaseQuery.getQuery("names");
      query.whereEqualTo("name", nameString);
-     query.findInBackground(new FindCallback<ParseObject>() {
-          public void done(List<ParseObject> objectList, ParseException e) {
+     query.findInBackground(new DatabaseQuery.FindCallback<DatabaseObject>() {
+          public void done(List<DatabaseObject> objectList, Exception e) {
                for (int i = 0; i < objectList.size(); i++) {
                     try {
-                         objectList.get(i).delete();
-                    } catch (ParseException exception) {
+                         objectList.get(i).deleteInBackground();
+                    } catch (Exception exception) {
                          Button name = (Button)findViewById(R.id.name);
                          name.setText("Fail.");
                     }
@@ -286,12 +273,9 @@ public void girls(View v) {
 }
 
 public void setMyState() {
-     ParseObject object = new ParseObject("_user");
-     object.put("user", currentAppUser);
-     object.put("name", nameString);
-     object.put("letter", letterString);
-     object.put("gender", genderString);
-     object.saveInBackground();
+     AppPrefs.saveString(this, "name", nameString);
+     AppPrefs.saveString(this, "letter", letterString);
+     AppPrefs.saveString(this, "gender", genderString);
 }
 
 public void pickRandomName() {
@@ -316,8 +300,7 @@ public int rand(int a, int b)
 }
 
 public void lastPage() {
-     ParseUser saveState = new ParseUser().getCurrentUser();
-     saveState.put("lastPage", "MyNames");
+     AppPrefs.saveString(this, "lastPage", "MyNames");
 }
 
 }

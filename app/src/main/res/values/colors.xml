@@ -9,8 +9,15 @@
      <color name="girls">#b89</color>
      <color name="fb">#3b5998</color>
      <color name="save">#fa2</color>
-     <color name="yes">#fd6</color>
+     <color name="yes">#2e7d32</color>
      <color name="delete">#922</color>
-     <color name="no">#622</color>
+     <color name="no">#c62828</color>
      <color name="darken">#3000</color>
+     <color name="text_primary">#111111</color>
+     <color name="text_secondary">#666666</color>
+     <color name="input_bg">#f0f0f0</color>
+     <color name="card_bg">#ffffff</color>
+     <color name="btn_begin_bg">#007AFF</color>
+     <color name="btn_google_bg">#4285F4</color>
+     <color name="link_color">#007AFF</color>
 </resources>

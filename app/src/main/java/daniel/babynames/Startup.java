@@ -5,7 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
 
-import com.parse.Parse;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class Startup extends Activity
 {
@@ -14,11 +15,19 @@ public class Startup extends Activity
 protected void onCreate(Bundle b)
 {
      requestWindowFeature(Window.FEATURE_NO_TITLE);
-     Parse.enableLocalDatastore(this);
-     Parse.initialize(this, "bm6jT0Rj1lUCwutfFk1WUgXm4wLRpN1Jz4LKMLqw", "Y8IFJzyA64AhAUOh7TvOn7FXd3U6xcIhwY4pQWuz");
      super.onCreate(b);
-     Intent i = new Intent(this, Account.class);
-     startActivity(i);
+     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+     if (currentUser != null) {
+          AppPrefs.loadFromFirebase(this, () -> {
+               Intent i = new Intent(Startup.this, Home.class);
+               startActivity(i);
+               finish();
+          });
+     } else {
+          Intent i = new Intent(this, Account.class);
+          startActivity(i);
+          finish();
+     }
 }
 
 }
