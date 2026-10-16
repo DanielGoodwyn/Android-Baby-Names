@@ -243,6 +243,7 @@ public void updateScreen() {
      Button femaleButton = (Button)findViewById(R.id.girls);
      Button allButton = (Button)findViewById(R.id.all);
      TextView homePage = (TextView)findViewById(R.id.homePage);
+     homePage.setTextColor(getResources().getColor(R.color.text_primary));
      getLimit();
      String space = " ";
      if (letterString.equals("")) {

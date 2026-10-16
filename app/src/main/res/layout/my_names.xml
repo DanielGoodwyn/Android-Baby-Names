@@ -6,7 +6,8 @@
      android:layout_width="match_parent"
      android:layout_height="match_parent"
      android:padding="@dimen/largeMargin"
-     tools:context=".NewNames">
+     tools:context=".NewNames"
+     android:background="@color/white">
 
      <LinearLayout
           android:orientation="horizontal"
@@ -19,6 +20,7 @@
                android:onClick="back"
                android:text="@string/back"
                android:textSize="@dimen/largeText"
+               android:textColor="@color/button_text"
                android:padding="@dimen/smallMargin"
                android:layout_height="fill_parent"
                android:layout_width="0dp"
@@ -31,6 +33,7 @@
                android:text="@string/myNamesPage"
                android:gravity="center"
                android:textSize="@dimen/largeText"
+               android:textColor="@color/text_primary"
                android:layout_height="fill_parent"
                android:layout_width="0dp"
                android:layout_weight="3"/>
@@ -39,6 +42,7 @@
                android:text="@string/myList"
                android:gravity="center"
                android:textSize="@dimen/largeText"
+               android:textColor="@color/text_primary"
                android:layout_height="fill_parent"
                android:layout_width="0dp"
                android:layout_weight="1"/>
@@ -58,6 +62,7 @@
                android:onClick="boys"
                android:text="@string/boys"
                android:textSize="@dimen/largeText"
+               android:textColor="@color/button_text"
                android:padding="@dimen/smallMargin"
                android:layout_width="0dp"
                android:layout_height="fill_parent"
@@ -70,6 +75,7 @@
                android:onClick="all"
                android:text="@string/all"
                android:textSize="@dimen/largeText"
+               android:textColor="@color/button_text"
                android:padding="@dimen/smallMargin"
                android:layout_width="0dp"
                android:layout_height="fill_parent"
@@ -81,6 +87,7 @@
                android:onClick="girls"
                android:text="@string/girls"
                android:textSize="@dimen/largeText"
+               android:textColor="@color/button_text"
                android:padding="@dimen/smallMargin"
                android:layout_width="0dp"
                android:layout_height="fill_parent"
@@ -113,6 +120,7 @@
                android:onClick="delete"
                android:text="@string/delete"
                android:textSize="@dimen/largeText"
+               android:textColor="@color/delete_text"
                android:layout_height="fill_parent"
                android:layout_width="0dp"
                android:layout_weight="1"
@@ -123,6 +131,7 @@
                android:onClick="name"
                android:text="@string/name"
                android:textSize="@dimen/largeText"
+               android:textColor="@color/button_text"
                android:layout_height="fill_parent"
                android:layout_width="0dp"
                android:layout_weight="4"
@@ -133,6 +142,7 @@
                android:onClick="random"
                android:text="@string/random"
                android:textSize="@dimen/largeText"
+               android:textColor="@color/button_text"
                android:layout_height="fill_parent"
                android:layout_width="0dp"
                android:layout_weight="1"

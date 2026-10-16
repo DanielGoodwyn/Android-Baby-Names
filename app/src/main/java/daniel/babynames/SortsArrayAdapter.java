@@ -26,7 +26,13 @@ public View getView(int position, View convertView, ViewGroup parent)
      View rowView = inflater.inflate(R.layout.name_cell, parent, false);
      TextView textView = (TextView) rowView.findViewById(R.id.name_cell);
      textView.setText(sorts[position]);
+     textView.setTextColor(getContext().getResources().getColor(R.color.text_primary));
      rowView.setBackgroundColor(getContext().getResources().getColor(R.color.white));
      return rowView;
+}
+
+@Override
+public View getDropDownView(int position, View convertView, ViewGroup parent) {
+     return getView(position, convertView, parent);
 }
 }

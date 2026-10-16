@@ -208,7 +208,7 @@ public void updateScreen() {
      AppPrefs.saveInt(this, "limit", limitInt);
 
      Button save = (Button)findViewById(R.id.save);
-     save.setTextColor(getResources().getColor(R.color.black));
+     save.setTextColor(getResources().getColor(R.color.save_text));
 }
 
 public void updateMyState() {
@@ -265,7 +265,7 @@ public void save(View v) {
      });
 
      Button save = (Button)findViewById(R.id.save);
-     save.setTextColor(getResources().getColor(R.color.black));
+     save.setTextColor(getResources().getColor(R.color.save_text));
 }
 
 public void random(View v) {
@@ -322,7 +322,7 @@ public void pickRandomName() {
      LVNames.setSelectionFromTop(randomNumber, (screenSize / 2) - 70);
 
      Button save = (Button)findViewById(R.id.save);
-     save.setTextColor(getResources().getColor(R.color.black));
+     save.setTextColor(getResources().getColor(R.color.save_text));
 }
 
 public int rand(int a, int b)

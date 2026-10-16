@@ -1,23 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-     <color name="black">#ffffff</color>
-     <color name="gray">#2a2a2a</color>
-     <color name="white">#121212</color>
-     <color name="all">#121212</color>
-     <color name="boy">#1e3a5f</color>
-     <color name="boys">#2e5288</color>
-     <color name="girl">#5e1d3d</color>
-     <color name="girls">#7e2a53</color>
-     <color name="fb">#3b5998</color>
-     <color name="save">#e68a00</color>
-     <color name="yes">#4caf50</color>
-     <color name="delete">#ef5350</color>
-     <color name="no">#e53935</color>
-     <color name="darken">#80000000</color>
-     <color name="text_primary">#f5f5f5</color>
-     <color name="text_secondary">#aaaaaa</color>
-     <color name="input_bg">#252525</color>
-     <color name="card_bg">#1e1e1e</color>
-     <color name="btn_begin_bg">#0a84ff</color>
-     <color name="btn_google_bg">#4285F4</color>
-     <color name="link_color">#60a5fa</color>
+    <!-- Core text & surfaces -->
+    <color name="text_primary">#ffffff</color>
+    <color name="text_secondary">#cccccc</color>
+    <color name="black">#ffffff</color>
+    <color name="white">#121212</color>
+    <color name="gray">#333333</color>
+    <color name="button_bg">#2e2e2e</color>
+    <color name="button_text">#ffffff</color>
+    <color name="card_bg">#1e1e1e</color>
+    <color name="input_bg">#252525</color>
+
+    <!-- Gender backgrounds: Deep dark tones with vibrant contrast for white text -->
+    <color name="all">#121212</color>
+    <color name="boy">#17345b</color>
+    <color name="boys">#264c80</color>
+    <color name="girl">#571837</color>
+    <color name="girls">#78254f</color>
+
+    <!-- Action colors -->
+    <color name="fb">#3b5998</color>
+    <color name="save">#e68a00</color>
+    <color name="save_text">#ffffff</color>
+    <color name="yes">#4caf50</color>
+    <color name="delete">#c62828</color>
+    <color name="delete_text">#ffffff</color>
+    <color name="no">#ef5350</color>
+    <color name="darken">#80000000</color>
+
+    <!-- Account buttons -->
+    <color name="btn_begin_bg">#0a84ff</color>
+    <color name="btn_google_bg">#4285F4</color>
+    <color name="link_color">#60a5fa</color>
 </resources>

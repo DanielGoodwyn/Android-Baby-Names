@@ -8,6 +8,6 @@
      android:gravity="center"
      android:padding="@dimen/smallMargin"
      android:layout_margin="@dimen/smallMargin"
-     android:textSize="@dimen/largeText">
-
+     android:textSize="@dimen/largeText"
+     android:textColor="@color/text_primary">
 </TextView>

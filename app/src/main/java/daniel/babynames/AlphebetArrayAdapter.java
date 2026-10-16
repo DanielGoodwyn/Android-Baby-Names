@@ -28,6 +28,7 @@ public View getView(int position, View convertView, ViewGroup parent)
      View rowView = inflater.inflate(R.layout.name_cell, parent, false);
      TextView textView = (TextView) rowView.findViewById(R.id.name_cell);
      textView.setText(lettersArray[position]);
+     textView.setTextColor(context.getResources().getColor(R.color.text_primary));
      return rowView;
 }
 }

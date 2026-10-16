@@ -200,7 +200,7 @@ public void updateScreen() {
      AppPrefs.saveInt(this, "limit", limitInt);
 
      Button delete = (Button)findViewById(R.id.delete);
-     delete.setTextColor(getResources().getColor(R.color.black));
+     delete.setTextColor(getResources().getColor(R.color.delete_text));
 }
 
 public void updateMyState() {
@@ -291,7 +291,7 @@ public void pickRandomName() {
      LVNames.setSelectionFromTop(randomNumber, (screenSize / 2) - 70);
 
      Button delete = (Button)findViewById(R.id.delete);
-     delete.setTextColor(getResources().getColor(R.color.black));
+     delete.setTextColor(getResources().getColor(R.color.delete_text));
 }
 
 public int rand(int a, int b)

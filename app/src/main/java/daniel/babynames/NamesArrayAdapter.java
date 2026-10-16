@@ -37,6 +37,7 @@ public class NamesArrayAdapter extends ArrayAdapter<String>
           } else {
                textView.setText("");
           }
+          textView.setTextColor(getContext().getResources().getColor(R.color.text_primary));
 
           String gender = (genders != null && position < genders.length && genders[position] != null) ? genders[position] : "";
 

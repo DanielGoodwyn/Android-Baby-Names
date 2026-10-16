@@ -10,4 +10,5 @@
      android:gravity="center"
      android:padding="@dimen/mediumMargin"
      android:layout_margin="@dimen/mediumMargin"
-     android:textSize="@dimen/mediumText"/>
+     android:textSize="@dimen/mediumText"
+     android:textColor="@color/text_primary"/>
