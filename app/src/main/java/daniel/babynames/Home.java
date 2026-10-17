@@ -168,9 +168,12 @@ public void setSortSpinnerSelection() {
 
 public void setAlphabetSelection() {
      alphabetSelection = 0;
-     for (int i = 0; i < letters.size(); i++) {
-          if (letterString.equals(letters.get(i))) {
-               alphabetSelection = i;
+     if (letterString != null && !letterString.isEmpty() && !letterString.equalsIgnoreCase("All")) {
+          for (int i = 0; i < letters.size(); i++) {
+               if (letterString.equalsIgnoreCase(letters.get(i))) {
+                    alphabetSelection = i;
+                    break;
+               }
           }
      }
 
@@ -245,8 +248,14 @@ public void updateScreen() {
      TextView homePage = (TextView)findViewById(R.id.homePage);
      homePage.setTextColor(getResources().getColor(R.color.text_primary));
      getLimit();
+     if (genderString == null || (!genderString.equals("M") && !genderString.equals("F"))) {
+          genderString = "All";
+     }
+     if (letterString == null) {
+          letterString = "";
+     }
      String space = " ";
-     if (letterString.equals("")) {
+     if (letterString.equals("") || letterString.equalsIgnoreCase("All")) {
           space = "";
      }
      if (genderString.equals("M")) {
@@ -284,8 +293,8 @@ public void updateScreen() {
 }
 
 public void updateMyState() {
-     genderString = AppPrefs.getString(this, "gender", "M");
-     letterString = AppPrefs.getString(this, "letter", "A");
+     genderString = AppPrefs.getString(this, "gender", "All");
+     letterString = AppPrefs.getString(this, "letter", "");
      nameString = AppPrefs.getString(this, "name", "Adam");
      sortString = AppPrefs.getString(this, "sort", "popular");
      limitInt = AppPrefs.getInt(this, "limit", 25);

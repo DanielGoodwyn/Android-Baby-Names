@@ -81,8 +81,12 @@ private void getNames(String gender) {
                          String objName = obj.getString("name");
                          if (objName == null) continue;
                          
-                         boolean genderMatch = genderString.equals("All") || (objGender != null && objGender.equals(genderString));
-                         boolean letterMatch = letterString == null || objName.toUpperCase().startsWith(letterString.toUpperCase());
+                         boolean isMale = "M".equalsIgnoreCase(genderString);
+                         boolean isFemale = "F".equalsIgnoreCase(genderString);
+                         boolean genderMatch = (!isMale && !isFemale) || (isMale && "M".equalsIgnoreCase(objGender)) || (isFemale && "F".equalsIgnoreCase(objGender));
+                         
+                         boolean hasLetter = (letterString != null && !letterString.isEmpty() && !letterString.equalsIgnoreCase("ALL") && !letterString.equals("*"));
+                         boolean letterMatch = !hasLetter || (objName != null && objName.toUpperCase().startsWith(letterString.toUpperCase()));
                          
                          if (genderMatch && letterMatch) {
                               filtered.add(obj);
@@ -175,6 +179,12 @@ public void updateScreen() {
      Button maleButton = (Button)findViewById(R.id.boys);
      Button femaleButton = (Button)findViewById(R.id.girls);
      Button allButton = (Button)findViewById(R.id.all);
+     if (genderString == null || (!genderString.equals("M") && !genderString.equals("F"))) {
+          genderString = "All";
+     }
+     if (letterString == null) {
+          letterString = "";
+     }
      if (genderString.equals("M")) {
           bg.setBackgroundColor(getResources().getColor(R.color.boy));
           maleButton.setBackgroundColor(getResources().getColor(R.color.black));
@@ -212,8 +222,8 @@ public void updateScreen() {
 }
 
 public void updateMyState() {
-     genderString = AppPrefs.getString(this, "gender", "M");
-     letterString = AppPrefs.getString(this, "letter", "A");
+     genderString = AppPrefs.getString(this, "gender", "All");
+     letterString = AppPrefs.getString(this, "letter", "");
      nameString = AppPrefs.getString(this, "name", "Adam");
      sortString = AppPrefs.getString(this, "sort", "popular");
      limitInt = AppPrefs.getInt(this, "limit", 25);

@@ -72,8 +72,8 @@ public class Account extends Activity {
         TextView user = findViewById(R.id.user);
         if (currentUser != null) {
             emailET.setText(currentUser.getEmail());
-            genderString = AppPrefs.getString(this, "gender", "M");
-            letterString = AppPrefs.getString(this, "letter", "A");
+            genderString = AppPrefs.getString(this, "gender", "All");
+            letterString = AppPrefs.getString(this, "letter", "");
             nameString = AppPrefs.getString(this, "name", "Adam");
             limitInt = AppPrefs.getInt(this, "limit", 25);
         } else {
@@ -130,8 +130,8 @@ public class Account extends Activity {
                                     if (signupTask.isSuccessful()) {
                                         String usernameStr = emailStr.split("@")[0];
                                         AppPrefs.saveString(Account.this, "username", usernameStr);
-                                        AppPrefs.saveString(Account.this, "gender", "M");
-                                        AppPrefs.saveString(Account.this, "letter", "A");
+                                        AppPrefs.saveString(Account.this, "gender", "All");
+                                        AppPrefs.saveString(Account.this, "letter", "");
                                         AppPrefs.saveString(Account.this, "name", "Adam");
                                         AppPrefs.saveInt(Account.this, "limit", 25);
                                         AppPrefs.saveString(Account.this, "sort", "popular");
@@ -205,8 +205,8 @@ public class Account extends Activity {
                             String existingUser = AppPrefs.getString(Account.this, "username", "");
                             if (existingUser == null || existingUser.isEmpty()) {
                                 AppPrefs.saveString(Account.this, "username", displayName);
-                                AppPrefs.saveString(Account.this, "gender", "M");
-                                AppPrefs.saveString(Account.this, "letter", "A");
+                                AppPrefs.saveString(Account.this, "gender", "All");
+                                AppPrefs.saveString(Account.this, "letter", "");
                                 AppPrefs.saveString(Account.this, "name", "Adam");
                                 AppPrefs.saveInt(Account.this, "limit", 25);
                                 AppPrefs.saveString(Account.this, "sort", "popular");

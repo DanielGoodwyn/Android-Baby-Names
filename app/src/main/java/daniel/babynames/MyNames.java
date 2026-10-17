@@ -71,10 +71,15 @@ private void getNames(String gender) {
      random.setEnabled(false);
      DatabaseQuery<DatabaseObject> q = DatabaseQuery.getQuery("names");
      q.whereEqualTo("userId", currentAppUserId);
-     if (gender!="All"&&gender!=null) {
-          q.whereEqualTo("gender", gender);
+     if ("M".equalsIgnoreCase(gender)) {
+          q.whereEqualTo("gender", "M");
+     } else if ("F".equalsIgnoreCase(gender)) {
+          q.whereEqualTo("gender", "F");
      }
-     q.whereMatches("name", letterString + ".*");
+     boolean hasLetter = (letterString != null && !letterString.isEmpty() && !letterString.equalsIgnoreCase("ALL") && !letterString.equals("*"));
+     if (hasLetter) {
+          q.whereMatches("name", letterString + ".*");
+     }
      if (sortString.equals("newest")) {
           q.orderByDescending("createdAt");
      } else if (sortString.equals("oldest")) {
@@ -102,12 +107,13 @@ private void getNames(String gender) {
                } else {
                     name.setEnabled(false);
                     random.setEnabled(false);
-                    if (genderString.equals("F")) {
-                         name.setText("No girl " + letterString +  " names saved yet.");
-                    } else if (genderString.equals("M")) {
-                         name.setText("No boy " + letterString +  " names saved yet.");
+                    String displayLetter = hasLetter ? (letterString + " ") : "";
+                    if ("F".equalsIgnoreCase(genderString)) {
+                         name.setText("No girl " + displayLetter + "names saved yet.");
+                    } else if ("M".equalsIgnoreCase(genderString)) {
+                         name.setText("No boy " + displayLetter + "names saved yet.");
                     } else {
-                         name.setText("No " + letterString +  " names saved yet.");
+                         name.setText("No " + displayLetter + "names saved yet.");
                     }
                }
           }
@@ -167,6 +173,12 @@ public void updateScreen() {
      Button maleButton = (Button)findViewById(R.id.boys);
      Button femaleButton = (Button)findViewById(R.id.girls);
      Button allButton = (Button)findViewById(R.id.all);
+     if (genderString == null || (!genderString.equals("M") && !genderString.equals("F"))) {
+          genderString = "All";
+     }
+     if (letterString == null) {
+          letterString = "";
+     }
      if (genderString.equals("M")) {
           bg.setBackgroundColor(getResources().getColor(R.color.boy));
           maleButton.setBackgroundColor(getResources().getColor(R.color.black));
@@ -204,8 +216,8 @@ public void updateScreen() {
 }
 
 public void updateMyState() {
-     genderString = AppPrefs.getString(this, "gender", "M");
-     letterString = AppPrefs.getString(this, "letter", "A");
+     genderString = AppPrefs.getString(this, "gender", "All");
+     letterString = AppPrefs.getString(this, "letter", "");
      nameString = AppPrefs.getString(this, "name", "Adam");
      sortString = AppPrefs.getString(this, "sort", "popular");
      limitInt = AppPrefs.getInt(this, "limit", 25);
