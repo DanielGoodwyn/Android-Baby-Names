@@ -251,17 +251,26 @@ public void back(View v) {
 
 public void save(View v) {
      DatabaseQuery<DatabaseObject> q = DatabaseQuery.getQuery("names");
-     q.whereEqualTo("name", nameString);
-     q.setLimit(1);
+     q.whereEqualTo("userId", currentAppUserId);
+     q.setLimit(1000);
      q.findInBackground(new DatabaseQuery.FindCallback<DatabaseObject>() {
           public void done(List<DatabaseObject> objectList, Exception e) {
                Button save = (Button)findViewById(R.id.save);
                if (e == null) {
-                    if (objectList.size()==0) {
+                    boolean alreadySaved = false;
+                    if (objectList != null) {
+                         for (DatabaseObject obj : objectList) {
+                              if (nameString != null && nameString.equalsIgnoreCase(obj.getString("name"))) {
+                                   alreadySaved = true;
+                                   break;
+                              }
+                         }
+                    }
+                    if (!alreadySaved) {
                          DatabaseObject object = new DatabaseObject("names");
                          object.put("userId", currentAppUserId);
                          object.put("name", nameString);
-                         object.put("gender", currentGenderString);
+                         object.put("gender", currentGenderString != null ? currentGenderString : "M");
                          object.saveInBackground();
                          save.setTextColor(getResources().getColor(R.color.yes));
                     } else {
@@ -283,26 +292,29 @@ public void random(View v) {
 }
 
 public void boys(View v) {
-     if (genderString!="M") {
-          getNames("M");
+     if (!"M".equals(genderString)) {
           genderString = "M";
           setMyState();
+          updateScreen();
+          getNames("M");
      }
 }
 
 public void all(View v) {
-     if (genderString!="All") {
-          getNames("All");
+     if (!"All".equals(genderString)) {
           genderString = "All";
           setMyState();
+          updateScreen();
+          getNames("All");
      }
 }
 
 public void girls(View v) {
-     if (genderString!="F") {
-          getNames("F");
+     if (!"F".equals(genderString)) {
           genderString = "F";
           setMyState();
+          updateScreen();
+          getNames("F");
      }
 }
 

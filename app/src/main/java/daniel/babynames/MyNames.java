@@ -17,6 +17,9 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 public class MyNames extends Activity
@@ -71,36 +74,59 @@ private void getNames(String gender) {
      random.setEnabled(false);
      DatabaseQuery<DatabaseObject> q = DatabaseQuery.getQuery("names");
      q.whereEqualTo("userId", currentAppUserId);
-     if ("M".equalsIgnoreCase(gender)) {
-          q.whereEqualTo("gender", "M");
-     } else if ("F".equalsIgnoreCase(gender)) {
-          q.whereEqualTo("gender", "F");
-     }
-     boolean hasLetter = (letterString != null && !letterString.isEmpty() && !letterString.equalsIgnoreCase("ALL") && !letterString.equals("*"));
-     if (hasLetter) {
-          q.whereMatches("name", letterString + ".*");
-     }
-     if (sortString.equals("newest")) {
-          q.orderByDescending("createdAt");
-     } else if (sortString.equals("oldest")) {
-          q.orderByAscending("createdAt");
-     } else if (sortString.equals("namesZtoA")) {
-          q.orderByDescending("name");
-     } else {
-          q.orderByAscending("name");
-     }
-     q.setLimit(limitInt);
+     q.setLimit(1000);
      q.findInBackground(new DatabaseQuery.FindCallback<DatabaseObject>() {
           public void done(List<DatabaseObject> objectList, Exception e) {
-               if (e == null) {
-                    for (int i = 0;i<objectList.size();i++) {
-                         names.add(i, objectList.get(i).getString("name"));
-                         genders.add(i, objectList.get(i).getString("gender"));
+               boolean isM = "M".equalsIgnoreCase(genderString);
+               boolean isF = "F".equalsIgnoreCase(genderString);
+               boolean hasLetter = (letterString != null && !letterString.isEmpty() && !letterString.equalsIgnoreCase("ALL") && !letterString.equals("*"));
+
+               if (e == null && objectList != null) {
+                    List<DatabaseObject> filtered = new ArrayList<>();
+                    for (DatabaseObject obj : objectList) {
+                         String objGender = obj.getString("gender");
+                         String objName = obj.getString("name");
+                         if (objName == null) continue;
+
+                         boolean genderMatch = (!isM && !isF) || (isM && "M".equalsIgnoreCase(objGender)) || (isF && "F".equalsIgnoreCase(objGender));
+                         boolean letterMatch = !hasLetter || objName.toUpperCase().startsWith(letterString.toUpperCase());
+
+                         if (genderMatch && letterMatch) {
+                              filtered.add(obj);
+                         }
                     }
-               } else {
+
+                    Collections.sort(filtered, new Comparator<DatabaseObject>() {
+                         @Override
+                         public int compare(DatabaseObject a, DatabaseObject b) {
+                              if (sortString.equals("newest")) {
+                                   Date da = a.getCreatedAt();
+                                   Date db = b.getCreatedAt();
+                                   if (da != null && db != null) return db.compareTo(da);
+                                   return 0;
+                              } else if (sortString.equals("oldest")) {
+                                   Date da = a.getCreatedAt();
+                                   Date db = b.getCreatedAt();
+                                   if (da != null && db != null) return da.compareTo(db);
+                                   return 0;
+                              } else if (sortString.equals("namesZtoA")) {
+                                   return b.getString("name").compareToIgnoreCase(a.getString("name"));
+                              } else { // namesAtoZ or popular
+                                   return a.getString("name").compareToIgnoreCase(b.getString("name"));
+                              }
+                         }
+                    });
+
+                    int limit = Math.min(limitInt, filtered.size());
+                    for (int i = 0; i < limit; i++) {
+                         names.add(filtered.get(i).getString("name"));
+                         genders.add(filtered.get(i).getString("gender"));
+                    }
+               } else if (e != null) {
                     Log.d("object", "Error: " + e.getMessage());
                }
-               if (names.size()>0) {
+
+               if (names.size() > 0) {
                     name.setEnabled(true);
                     random.setEnabled(true);
                     pickRandomName();
@@ -115,6 +141,10 @@ private void getNames(String gender) {
                     } else {
                          name.setText("No " + displayLetter + "names saved yet.");
                     }
+                    if (namesAdapter != null) {
+                         namesAdapter.notifyDataSetChanged();
+                    }
+                    populateNamesListView();
                }
           }
      });
@@ -239,17 +269,24 @@ public void delete(View v) {
      Button delete = (Button)findViewById(R.id.delete);
      delete.setTextColor(getResources().getColor(R.color.no));
      DatabaseQuery<DatabaseObject> query = DatabaseQuery.getQuery("names");
-     query.whereEqualTo("name", nameString);
+     query.whereEqualTo("userId", currentAppUserId);
      query.findInBackground(new DatabaseQuery.FindCallback<DatabaseObject>() {
           public void done(List<DatabaseObject> objectList, Exception e) {
-               for (int i = 0; i < objectList.size(); i++) {
-                    try {
-                         objectList.get(i).deleteInBackground();
-                    } catch (Exception exception) {
-                         Button name = (Button)findViewById(R.id.name);
-                         name.setText("Fail.");
+               if (objectList != null) {
+                    for (int i = 0; i < objectList.size(); i++) {
+                         DatabaseObject obj = objectList.get(i);
+                         if (nameString != null && nameString.equalsIgnoreCase(obj.getString("name"))) {
+                              try {
+                                   obj.deleteInBackground();
+                              } catch (Exception exception) {
+                                   Button name = (Button)findViewById(R.id.name);
+                                   name.setText("Fail.");
+                              }
+                         }
                     }
-                    getNames(genderString);
+               }
+               getNames(genderString);
+               if (namesAdapter != null) {
                     namesAdapter.notifyDataSetChanged();
                }
           }
@@ -261,26 +298,29 @@ public void random(View v) {
 }
 
 public void boys(View v) {
-     if (genderString!="M") {
-          getNames("M");
+     if (!"M".equals(genderString)) {
           genderString = "M";
           setMyState();
+          updateScreen();
+          getNames("M");
      }
 }
 
 public void all(View v) {
-     if (genderString!="All") {
-          getNames("All");
+     if (!"All".equals(genderString)) {
           genderString = "All";
           setMyState();
+          updateScreen();
+          getNames("All");
      }
 }
 
 public void girls(View v) {
-     if (genderString!="F") {
-          getNames("F");
+     if (!"F".equals(genderString)) {
           genderString = "F";
           setMyState();
+          updateScreen();
+          getNames("F");
      }
 }
 

@@ -42,8 +42,22 @@ public class DatabaseObject {
         this.objectId = id;
     }
 
+    public java.util.Date getCreatedAt() {
+        Object val = data.get("createdAt");
+        if (val instanceof com.google.firebase.Timestamp) {
+            return ((com.google.firebase.Timestamp) val).toDate();
+        }
+        if (val instanceof java.util.Date) {
+            return (java.util.Date) val;
+        }
+        return null;
+    }
+
     public void saveInBackground() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        if (!data.containsKey("createdAt")) {
+            data.put("createdAt", com.google.firebase.firestore.FieldValue.serverTimestamp());
+        }
         if (objectId == null) {
             db.collection(className).add(data)
                 .addOnSuccessListener(docRef -> {
