@@ -50,7 +50,7 @@ protected void onCreate(Bundle b)
      nameString = "Loading..";
      updateMyState();
      updateScreen();
-     getNames(genderString);
+     startFavoritesListener();
 
      Display display = getWindowManager().getDefaultDisplay();
      Point size = new Point();
@@ -64,9 +64,36 @@ protected void onCreate(Bundle b)
      }
 }
 
-private void getNames(String gender) {
-     names.clear();
-     genders.clear();
+private List<DatabaseObject> rawFavorites = new ArrayList<>();
+private com.google.firebase.firestore.ListenerRegistration namesListener;
+
+@Override
+protected void onResume() {
+     super.onResume();
+     updateMyState();
+     updateScreen();
+     if (namesListener == null) {
+          startFavoritesListener();
+     } else {
+          applyFilterAndReload();
+     }
+}
+
+@Override
+protected void onDestroy() {
+     super.onDestroy();
+     if (namesListener != null) {
+          namesListener.remove();
+          namesListener = null;
+     }
+}
+
+private void startFavoritesListener() {
+     if (currentAppUserId == null || currentAppUserId.isEmpty()) return;
+     if (namesListener != null) {
+          namesListener.remove();
+          namesListener = null;
+     }
      final Button name = (Button)findViewById(R.id.name);
      final Button random = (Button)findViewById(R.id.random);
      name.setText("Loading...");
@@ -75,79 +102,89 @@ private void getNames(String gender) {
      DatabaseQuery<DatabaseObject> q = DatabaseQuery.getQuery("names");
      q.whereEqualTo("userId", currentAppUserId);
      q.setLimit(1000);
-     q.findInBackground(new DatabaseQuery.FindCallback<DatabaseObject>() {
+     namesListener = q.subscribe(new DatabaseQuery.FindCallback<DatabaseObject>() {
           public void done(List<DatabaseObject> objectList, Exception e) {
-               boolean isM = "M".equalsIgnoreCase(genderString);
-               boolean isF = "F".equalsIgnoreCase(genderString);
-               boolean hasLetter = (letterString != null && !letterString.isEmpty() && !letterString.equalsIgnoreCase("ALL") && !letterString.equals("*"));
-
                if (e == null && objectList != null) {
-                    List<DatabaseObject> filtered = new ArrayList<>();
-                    for (DatabaseObject obj : objectList) {
-                         String objGender = obj.getString("gender");
-                         String objName = obj.getString("name");
-                         if (objName == null) continue;
-
-                         boolean genderMatch = (!isM && !isF) || (isM && "M".equalsIgnoreCase(objGender)) || (isF && "F".equalsIgnoreCase(objGender));
-                         boolean letterMatch = !hasLetter || objName.toUpperCase().startsWith(letterString.toUpperCase());
-
-                         if (genderMatch && letterMatch) {
-                              filtered.add(obj);
-                         }
-                    }
-
-                    Collections.sort(filtered, new Comparator<DatabaseObject>() {
-                         @Override
-                         public int compare(DatabaseObject a, DatabaseObject b) {
-                              if (sortString.equals("newest")) {
-                                   Date da = a.getCreatedAt();
-                                   Date db = b.getCreatedAt();
-                                   if (da != null && db != null) return db.compareTo(da);
-                                   return 0;
-                              } else if (sortString.equals("oldest")) {
-                                   Date da = a.getCreatedAt();
-                                   Date db = b.getCreatedAt();
-                                   if (da != null && db != null) return da.compareTo(db);
-                                   return 0;
-                              } else if (sortString.equals("namesZtoA")) {
-                                   return b.getString("name").compareToIgnoreCase(a.getString("name"));
-                              } else { // namesAtoZ or popular
-                                   return a.getString("name").compareToIgnoreCase(b.getString("name"));
-                              }
-                         }
-                    });
-
-                    int limit = Math.min(limitInt, filtered.size());
-                    for (int i = 0; i < limit; i++) {
-                         names.add(filtered.get(i).getString("name"));
-                         genders.add(filtered.get(i).getString("gender"));
-                    }
-               } else if (e != null) {
-                    Log.d("object", "Error: " + e.getMessage());
-               }
-
-               if (names.size() > 0) {
-                    name.setEnabled(true);
-                    random.setEnabled(true);
-                    pickRandomName();
+                    rawFavorites = objectList;
                } else {
-                    name.setEnabled(false);
-                    random.setEnabled(false);
-                    String displayLetter = hasLetter ? (letterString + " ") : "";
-                    if ("F".equalsIgnoreCase(genderString)) {
-                         name.setText("No girl " + displayLetter + "names saved yet.");
-                    } else if ("M".equalsIgnoreCase(genderString)) {
-                         name.setText("No boy " + displayLetter + "names saved yet.");
-                    } else {
-                         name.setText("No " + displayLetter + "names saved yet.");
-                    }
-                    if (namesAdapter != null) {
-                         namesAdapter.notifyDataSetChanged();
-                    }
-                    populateNamesListView();
+                    rawFavorites = new ArrayList<>();
+                    if (e != null) Log.d("object", "Error: " + e.getMessage());
+               }
+               applyFilterAndReload();
+          }
+     });
+}
+
+private void applyFilterAndReload() {
+     names.clear();
+     genders.clear();
+     final Button name = (Button)findViewById(R.id.name);
+     final Button random = (Button)findViewById(R.id.random);
+     boolean isM = "M".equalsIgnoreCase(genderString);
+     boolean isF = "F".equalsIgnoreCase(genderString);
+     boolean hasLetter = (letterString != null && !letterString.isEmpty() && !letterString.equalsIgnoreCase("ALL") && !letterString.equals("*"));
+
+     List<DatabaseObject> filtered = new ArrayList<>();
+     for (DatabaseObject obj : rawFavorites) {
+          String objGender = obj.getString("gender");
+          String objName = obj.getString("name");
+          if (objName == null) continue;
+
+          boolean genderMatch = (!isM && !isF) || (isM && "M".equalsIgnoreCase(objGender)) || (isF && "F".equalsIgnoreCase(objGender));
+          boolean letterMatch = !hasLetter || objName.toUpperCase().startsWith(letterString.toUpperCase());
+
+          if (genderMatch && letterMatch) {
+               filtered.add(obj);
+          }
+     }
+
+     Collections.sort(filtered, new Comparator<DatabaseObject>() {
+          @Override
+          public int compare(DatabaseObject a, DatabaseObject b) {
+               if (sortString.equals("newest")) {
+                    Date da = a.getCreatedAt();
+                    Date db = b.getCreatedAt();
+                    if (da != null && db != null) return db.compareTo(da);
+                    return 0;
+               } else if (sortString.equals("oldest")) {
+                    Date da = a.getCreatedAt();
+                    Date db = b.getCreatedAt();
+                    if (da != null && db != null) return da.compareTo(db);
+                    return 0;
+               } else if (sortString.equals("namesZtoA")) {
+                    return b.getString("name").compareToIgnoreCase(a.getString("name"));
+               } else { // namesAtoZ or popular
+                    return a.getString("name").compareToIgnoreCase(b.getString("name"));
                }
           }
      });
+
+     int limit = Math.min(limitInt, filtered.size());
+     for (int i = 0; i < limit; i++) {
+          names.add(filtered.get(i).getString("name"));
+          genders.add(filtered.get(i).getString("gender"));
+     }
+
+     if (names.size() > 0) {
+          name.setEnabled(true);
+          random.setEnabled(true);
+          pickRandomName();
+     } else {
+          name.setEnabled(false);
+          random.setEnabled(false);
+          String displayLetter = hasLetter ? (letterString + " ") : "";
+          if ("F".equalsIgnoreCase(genderString)) {
+               name.setText("No girl " + displayLetter + "names saved yet.");
+          } else if ("M".equalsIgnoreCase(genderString)) {
+               name.setText("No boy " + displayLetter + "names saved yet.");
+          } else {
+               name.setText("No " + displayLetter + "names saved yet.");
+          }
+          if (namesAdapter != null) {
+               namesAdapter.notifyDataSetChanged();
+          }
+          populateNamesListView();
+     }
 }
 
 NamesArrayAdapter namesAdapter;
@@ -285,10 +322,6 @@ public void delete(View v) {
                          }
                     }
                }
-               getNames(genderString);
-               if (namesAdapter != null) {
-                    namesAdapter.notifyDataSetChanged();
-               }
           }
      });
 }
@@ -302,7 +335,7 @@ public void boys(View v) {
           genderString = "M";
           setMyState();
           updateScreen();
-          getNames("M");
+          applyFilterAndReload();
      }
 }
 
@@ -311,7 +344,7 @@ public void all(View v) {
           genderString = "All";
           setMyState();
           updateScreen();
-          getNames("All");
+          applyFilterAndReload();
      }
 }
 
@@ -320,7 +353,7 @@ public void girls(View v) {
           genderString = "F";
           setMyState();
           updateScreen();
-          getNames("F");
+          applyFilterAndReload();
      }
 }
 

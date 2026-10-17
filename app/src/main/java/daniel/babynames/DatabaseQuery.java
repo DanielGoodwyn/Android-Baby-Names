@@ -99,4 +99,47 @@ public class DatabaseQuery<T extends DatabaseObject> {
             if (callback != null) callback.done(null, e);
         });
     }
+
+    public com.google.firebase.firestore.ListenerRegistration subscribe(final FindCallback<T> callback) {
+        return query.addSnapshotListener((queryDocumentSnapshots, e) -> {
+            if (e != null) {
+                if (callback != null) callback.done(null, e);
+                return;
+            }
+            if (queryDocumentSnapshots != null) {
+                List<T> results = new ArrayList<>();
+                for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                    DatabaseObject obj = new DatabaseObject(className);
+                    obj.setObjectId(doc.getId());
+                    if (doc.getData() != null) {
+                        obj.data.putAll(doc.getData());
+                    }
+                    results.add((T) obj);
+                }
+                
+                if (orderKey != null) {
+                    java.util.Collections.sort(results, (a, b) -> {
+                        Object valA = ((DatabaseObject)a).data.get(orderKey);
+                        Object valB = ((DatabaseObject)b).data.get(orderKey);
+                        if (valA instanceof Number && valB instanceof Number) {
+                            double diff = ((Number)valA).doubleValue() - ((Number)valB).doubleValue();
+                            int res = diff > 0 ? 1 : (diff < 0 ? -1 : 0);
+                            return orderAscending ? res : -res;
+                        }
+                        if (valA != null && valB != null) {
+                            int res = valA.toString().compareTo(valB.toString());
+                            return orderAscending ? res : -res;
+                        }
+                        return 0;
+                    });
+                }
+                
+                if (localLimit > 0 && results.size() > localLimit) {
+                    results = results.subList(0, localLimit);
+                }
+                
+                if (callback != null) callback.done(results, null);
+            }
+        });
+    }
 }
