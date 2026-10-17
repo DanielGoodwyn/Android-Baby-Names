@@ -123,10 +123,13 @@
                android:id="@+id/sorts_spinner"
                android:layout_width="0dp"
                android:layout_height="fill_parent"
-               android:textSize="@dimen/largeText"
-               android:padding="@dimen/mediumMargin"
-               android:layout_weight="1"
+               android:paddingLeft="8dp"
+               android:paddingRight="8dp"
+               android:paddingTop="4dp"
+               android:paddingBottom="4dp"
+               android:layout_weight="1.6"
                android:background="@color/gray"
+               android:gravity="center"
                android:dropDownWidth="fill_parent"/>
 
           <EditText
@@ -143,7 +146,7 @@
                android:padding="@dimen/smallMargin"
                android:layout_width="0dp"
                android:layout_height="fill_parent"
-               android:layout_weight="1"
+               android:layout_weight="0.7"
                android:gravity="center"
                android:background="@color/white"/>
 
@@ -156,7 +159,7 @@
                android:padding="@dimen/smallMargin"
                android:layout_width="0dp"
                android:layout_height="fill_parent"
-               android:layout_weight="1"
+               android:layout_weight="0.7"
                android:background="@color/gray"/>
 
      </LinearLayout>

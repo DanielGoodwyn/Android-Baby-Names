@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView
      xmlns:android="http://schemas.android.com/apk/res/android"
-     android:id="@android:id/text1"
+     android:id="@+id/sort_cell_text"
      android:singleLine="true"
      android:background="@color/white"
      android:layout_width="match_parent"
      android:layout_height="wrap_content"
-     android:textAlignment="center"
      android:gravity="center"
-     android:padding="@dimen/mediumMargin"
-     android:layout_margin="@dimen/mediumMargin"
-     android:textSize="@dimen/mediumText"
+     android:paddingTop="14dp"
+     android:paddingBottom="14dp"
+     android:paddingLeft="16dp"
+     android:paddingRight="16dp"
+     android:textSize="18sp"
      android:textColor="@color/text_primary"/>
