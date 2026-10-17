@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import androidx.core.widget.TextViewCompat;
 
 public class SortsArrayAdapter extends ArrayAdapter<String>
 {
@@ -42,8 +43,8 @@ public View getView(int position, View convertView, ViewGroup parent)
      if (textView != null) {
           textView.setText(getDisplayName(sorts[position]));
           textView.setTextColor(getContext().getResources().getColor(R.color.text_primary));
-          textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
-          textView.setPadding(6, 6, 6, 6);
+          TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(textView, 10, 16, 1, TypedValue.COMPLEX_UNIT_SP);
+          textView.setPadding(4, 4, 4, 4);
      }
      rowView.setBackgroundColor(getContext().getResources().getColor(R.color.gray));
      return rowView;
@@ -57,8 +58,9 @@ public View getDropDownView(int position, View convertView, ViewGroup parent) {
      if (textView != null) {
           textView.setText(getDisplayName(sorts[position]));
           textView.setTextColor(getContext().getResources().getColor(R.color.text_primary));
-          textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-          textView.setPadding(16, 24, 16, 24);
+          TextViewCompat.setAutoSizeTextTypeWithDefaults(textView, TextViewCompat.AUTO_SIZE_TEXT_TYPE_NONE);
+          textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
+          textView.setPadding(16, 20, 16, 20);
      }
      rowView.setBackgroundColor(getContext().getResources().getColor(R.color.white));
      return rowView;

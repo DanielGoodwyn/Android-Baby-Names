@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView
      xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
      android:id="@+id/sort_cell_text"
      android:singleLine="true"
+     android:maxLines="1"
      android:background="@color/white"
      android:layout_width="match_parent"
      android:layout_height="wrap_content"
      android:gravity="center"
+     android:textAlignment="center"
      android:paddingTop="14dp"
      android:paddingBottom="14dp"
      android:paddingLeft="16dp"
      android:paddingRight="16dp"
      android:textSize="18sp"
+     app:autoSizeTextType="uniform"
+     app:autoSizeMinTextSize="10sp"
+     app:autoSizeMaxTextSize="18sp"
+     app:autoSizeStepGranularity="1sp"
      android:textColor="@color/text_primary"/>
