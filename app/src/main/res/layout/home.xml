@@ -132,23 +132,18 @@
                android:gravity="center"
                android:dropDownWidth="260dp"/>
 
-          <EditText
-               android:id="@+id/limit"
-               android:imeActionId="1"
-               android:hint="@string/limit"
-               android:text="25"
-               android:singleLine="true"
-               android:inputType="number"
-               android:textSize="@dimen/mediumText"
-               android:textAlignment="center"
-               android:textColor="@color/text_primary"
-               android:textColorHint="@color/text_secondary"
+          <Button
+               android:id="@+id/search_button"
+               android:onClick="openSearchFilter"
+               android:text=""
+               android:foreground="@drawable/tool_search"
+               android:foregroundGravity="center"
+               android:gravity="center"
                android:padding="@dimen/smallMargin"
                android:layout_width="0dp"
                android:layout_height="fill_parent"
                android:layout_weight="1"
-               android:gravity="center"
-               android:background="@color/white"/>
+               android:background="@color/gray"/>
 
           <Button
                android:id="@+id/names"

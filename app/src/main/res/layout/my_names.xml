@@ -38,15 +38,18 @@
                android:layout_width="0dp"
                android:layout_weight="3"/>
 
-          <TextView
+          <Button
+               android:id="@+id/search_button"
+               android:onClick="openSearchFilter"
                android:text=""
-               android:foreground="@drawable/tool_star"
+               android:foreground="@drawable/tool_search"
                android:foregroundGravity="center"
                android:gravity="center"
                android:padding="@dimen/smallMargin"
                android:layout_height="fill_parent"
                android:layout_width="0dp"
-               android:layout_weight="1"/>
+               android:layout_weight="1"
+               android:background="@color/gray"/>
 
      </LinearLayout>
 

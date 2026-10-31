@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:padding="16dp">
+
+    <!-- Header bar -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:text="Search &amp; Filter"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary" />
+
+        <Button
+            android:id="@+id/dialog_close_button"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="Done"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@color/btn_begin_bg"
+            android:background="?android:attr/selectableItemBackground" />
+    </RelativeLayout>
+
+    <!-- Limit Section -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="EXPLORE LIMIT"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_secondary"
+        android:letterSpacing="0.05" />
+
+    <LinearLayout
+        android:id="@+id/limit_buttons_group"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:layout_marginTop="6dp"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <Button
+            android:id="@+id/limit_25"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="25"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginRight="4dp"
+            android:background="@color/button_bg"
+            android:textColor="@color/button_text" />
+
+        <Button
+            android:id="@+id/limit_50"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="50"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginRight="4dp"
+            android:background="@color/button_bg"
+            android:textColor="@color/button_text" />
+
+        <Button
+            android:id="@+id/limit_100"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="100"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginRight="4dp"
+            android:background="@color/button_bg"
+            android:textColor="@color/button_text" />
+
+        <Button
+            android:id="@+id/limit_all"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="All"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:background="@color/button_bg"
+            android:textColor="@color/button_text" />
+    </LinearLayout>
+
+    <!-- Search Section -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:text="SEARCH SSA 2023 DATASET"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_secondary"
+        android:letterSpacing="0.05" />
+
+    <EditText
+        android:id="@+id/search_query_input"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginTop="6dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:hint="Type a name (e.g. Liam, Emma)..."
+        android:textSize="15sp"
+        android:singleLine="true"
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_secondary"
+        android:background="@color/input_bg"
+        android:inputType="textCapWords" />
+
+    <!-- Results List & Empty State -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="8dp">
+
+        <ListView
+            android:id="@+id/search_results_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/gray"
+            android:dividerHeight="1dp" />
+
+        <TextView
+            android:id="@+id/search_empty_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="20dp"
+            android:textSize="14sp"
+            android:lineSpacingExtra="4dp"
+            android:textColor="@color/text_secondary"
+            android:text="Type a name above to search 31,830 official SSA names.\n\nSave any name directly to your Favorites." />
+    </FrameLayout>
+
+</LinearLayout>

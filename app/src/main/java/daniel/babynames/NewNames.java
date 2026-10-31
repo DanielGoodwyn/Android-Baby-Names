@@ -69,56 +69,14 @@ private void getNames(String gender) {
      final Button nameButton = (Button)findViewById(R.id.name);
      nameButton.setText("Loading...");
      nameButton.setEnabled(false);
-     DatabaseQuery<DatabaseObject> q = DatabaseQuery.getQuery("Name");
-     
-     q.findInBackground(new DatabaseQuery.FindCallback<DatabaseObject>() {
-          public void done(List<DatabaseObject> objectList, Exception e) {
-               if (e == null) {
-                    List<DatabaseObject> filtered = new ArrayList<>();
-                    for (int i = 0; i < objectList.size(); i++) {
-                         DatabaseObject obj = objectList.get(i);
-                         String objGender = obj.getString("gender");
-                         String objName = obj.getString("name");
-                         if (objName == null) continue;
-                         
-                         boolean isMale = "M".equalsIgnoreCase(genderString);
-                         boolean isFemale = "F".equalsIgnoreCase(genderString);
-                         boolean genderMatch = (!isMale && !isFemale) || (isMale && "M".equalsIgnoreCase(objGender)) || (isFemale && "F".equalsIgnoreCase(objGender));
-                         
-                         boolean hasLetter = (letterString != null && !letterString.isEmpty() && !letterString.equalsIgnoreCase("ALL") && !letterString.equals("*"));
-                         boolean letterMatch = !hasLetter || (objName != null && objName.toUpperCase().startsWith(letterString.toUpperCase()));
-                         
-                         if (genderMatch && letterMatch) {
-                              filtered.add(obj);
-                         }
-                    }
-                    
-                    Collections.sort(filtered, new Comparator<DatabaseObject>() {
-                         public int compare(DatabaseObject a, DatabaseObject b) {
-                              if (sortString.equals("uncommon")) {
-                                   return b.getInt("rank") - a.getInt("rank");
-                              } else if (sortString.equals("popular")) {
-                                   return a.getInt("rank") - b.getInt("rank");
-                              } else if (sortString.equals("namesZtoA")) {
-                                   return b.getString("name").compareToIgnoreCase(a.getString("name"));
-                              } else { // namesAtoZ
-                                   return a.getString("name").compareToIgnoreCase(b.getString("name"));
-                              }
-                         }
-                    });
-                    
-                    int limit = Math.min(limitInt, filtered.size());
-                    for (int i = 0; i < limit; i++) {
-                         names.add(filtered.get(i).getString("name"));
-                         genders.add(filtered.get(i).getString("gender"));
-                    }
-               } else {
-                    Log.d("object", "Error: " + e.getMessage());
-               }
-               pickRandomName();
-               nameButton.setEnabled(true);
-          }
-     });
+
+     List<NamesDatabase.NameItem> items = NamesDatabase.getInstance(this).getNames(genderString, letterString, sortString, limitInt);
+     for (NamesDatabase.NameItem item : items) {
+          names.add(item.name);
+          genders.add(item.gender);
+     }
+     pickRandomName();
+     nameButton.setEnabled(true);
 }
 
 NamesArrayAdapter namesAdapter;

@@ -43,10 +43,6 @@ protected void onCreate(Bundle b) {
      createSortsSpinner();
      setSortSpinnerSelection();
 
-     EditText limit = (EditText)findViewById(R.id.limit);
-     limit.setImeActionLabel("set", KeyEvent.KEYCODE_ENTER);
-     limit.setText(limitInt+"");
-
      updateScreen();
 
      Display display = getWindowManager().getDefaultDisplay();
@@ -224,20 +220,18 @@ public void names(View v) {
 }
 
 public void getLimit() {
-     EditText limit = (EditText) findViewById(R.id.limit);
-     int limitNumber;
-     if (limit.getText().toString().equals("")) {
-          limitNumber = 1;
-     } else {
-          limitNumber = (Integer.parseInt(limit.getText().toString()));
-     }
-     if (limitNumber < 2) {
-          limitInt = 1;
-     } else if (limitNumber > 1000) {
-          limitInt = 1000;
-     } else {
-          limitInt = limitNumber;
-     }
+     limitInt = AppPrefs.getInt(this, "limit", 25);
+}
+
+public void openSearchFilter(View v) {
+     SearchFilterDialog dialog = new SearchFilterDialog(this, limitInt, new SearchFilterDialog.OnLimitChangedListener() {
+          @Override
+          public void onLimitChanged(int newLimit) {
+               limitInt = newLimit;
+               updateScreen();
+          }
+     });
+     dialog.show();
 }
 
 public void updateScreen() {

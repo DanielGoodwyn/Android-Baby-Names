@@ -388,4 +388,15 @@ public void lastPage() {
      AppPrefs.saveString(this, "lastPage", "MyNames");
 }
 
+public void openSearchFilter(View v) {
+     SearchFilterDialog dialog = new SearchFilterDialog(this, limitInt, new SearchFilterDialog.OnLimitChangedListener() {
+          @Override
+          public void onLimitChanged(int newLimit) {
+               limitInt = newLimit;
+               AppPrefs.saveInt(MyNames.this, "limit", limitInt);
+          }
+     });
+     dialog.show();
+}
+
 }
